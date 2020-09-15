@@ -1,0 +1,37 @@
+{
+	"config": [
+		{
+			"serialID": "",
+			"serialKey": "",
+			"selectedMode": "",
+			"codePc": "12345",
+			"carpetaRaiz": "C:\\FTP\\Voxline\\Pivotes\\",
+			"reproductor": "C:\\Program Files (x86)\\VoxLine\\VxPlayer\\VoxPlayer.exe",
+			"tiempoChequeo": "1",
+			"syncing": 0,
+			"modeVxCMS": [
+				{
+					"servidor": "",
+					"contrasena": ""
+				}
+			],
+			"modeLocal": [ {} ],
+			"modeFTP": [
+				{
+					"ipFTP": "192.168.1.33",
+					"puerto": "21",
+					"usuario": "voxPivote",
+					"contrasena": "voxline55"
+				}
+			],
+			"modePivote": [
+				{
+					"servidor": "http://vxcms.voxline.cl/",
+					"contrasena": ""
+				}
+			],
+			"screens": [
+			]
+		}
+	]
+}

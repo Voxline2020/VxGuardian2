@@ -1,0 +1,64 @@
+﻿<Window x:Class="VxGuardian.View.PivoteFTP"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VxGuardian.View"
+        mc:Ignorable="d"
+        
+        Title="Pivote FTP" Height="490" Width="394" WindowStartupLocation="CenterScreen" Topmost="True" ResizeMode="NoResize" Closing="Window_Closing" WindowStyle="None" >
+  <Grid Margin="20">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+
+
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition Width="0.6*"/>
+    </Grid.ColumnDefinitions>
+
+    <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" Content="Pivote FTP"/>
+        <Button x:Name="BtnConfig" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Width="Auto" Height="Auto" FontWeight="Bold" Click="BtnConfig_Click" >Config</Button>
+
+    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
+      <Label>Codigo Pivote</Label>
+      <TextBox Margin="5"  GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton"  x:Name="TxtCodigo">1001001</TextBox>
+    </StackPanel>
+
+    <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical">
+      <Label >Raiz</Label>
+      <TextBox Margin="5" x:Name="TxtRaizSel">/</TextBox>
+    </StackPanel>
+    <Button x:Name="SelRaiz" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0" Width="100" Click="SelRaiz_Click">Seleccionar</Button>
+
+    <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Vertical">
+      <Label>Tiempo de Chequeo (mins)</Label>
+      <TextBox Margin="5" x:Name="TxtChequeo" Width="30"  GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton"  HorizontalAlignment="Left">1</TextBox>
+    </StackPanel>
+
+    <Separator Margin="0,10,0,10" Grid.Row="4" Grid.ColumnSpan="2"></Separator>
+
+    <StackPanel Orientation="Vertical" Grid.Row="5" Grid.Column="0">
+      <Label>Servidor</Label>
+      <TextBox Margin="5" x:Name="TxtServidor"  GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton">https://voxcms.cl</TextBox>
+    </StackPanel>
+
+    <StackPanel Orientation="Vertical" Grid.Row="6" Grid.Column="0">
+      <Label>Codigo Maestro</Label>
+      <PasswordBox Margin="5" x:Name="TxtCodigoMaestro"  GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton"></PasswordBox>
+    </StackPanel>
+
+    <StackPanel Grid.Row="7"  Grid.ColumnSpan="2" VerticalAlignment="Top" HorizontalAlignment="Center" Height="Auto">
+      <Button x:Name="BtnIniciar" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" Padding="40,10" Width="Auto" Height="Auto" FontWeight="Bold" Click="BtnIniciar_Click">Iniciar</Button>
+      <Button x:Name="BtnCerrar" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" Padding="10" Width="Auto" Height="Auto" FontWeight="Bold"  Background="DarkRed" Foreground="White" Click="BtnCerrar_Click">Cerrar</Button>
+    </StackPanel>
+  </Grid>
+</Window>

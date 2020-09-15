@@ -1,0 +1,82 @@
+﻿<Window x:Class="VxGuardian.View.ConfiguracionFTP"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VxGuardian.View"
+        mc:Ignorable="d"
+        Title="Configuración FTP" Height="560"  Width="394" WindowStartupLocation="CenterScreen" Topmost="True" Closing="Window_Closing" ResizeMode="NoResize" WindowStyle="None">
+  <Grid Margin="20">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="30" />
+      <RowDefinition Height="50" />
+      <RowDefinition Height="50" />
+      <RowDefinition Height="50" />
+      <RowDefinition Height="50" />
+      <RowDefinition Height="25" />
+      <RowDefinition Height="50" />
+      <RowDefinition Height="50" />
+      <RowDefinition Height="50" />
+      <RowDefinition Height="120" />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition />
+      <ColumnDefinition Width="0.6*" />
+    </Grid.ColumnDefinitions>
+
+    <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold">Configuracion FTP</Label>
+    <Button x:Name="BtnConfig" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Width="80" Height="20" FontWeight="Bold" Click="BtnConfig_Click" >Config</Button>
+
+    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
+      <Label>Codigo PC*</Label>
+      <TextBox Margin="5" GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton"  x:Name="TxtCodigo">PC1001001</TextBox>
+    </StackPanel>
+
+    <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical">
+      <Label >Raiz*</Label>
+      <TextBox Margin="5" x:Name="TxtRaizSel" IsReadOnly="True">/</TextBox>
+    </StackPanel>
+    <Button x:Name="SelRaiz" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,0" Width="100" Click="SelRaiz_Click">Seleccionar</Button>
+
+    <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Vertical">
+      <Label>Reproductor</Label>
+      <TextBox Margin="5" x:Name="TxtReproductor" IsReadOnly="True">.exe</TextBox>
+    </StackPanel>
+    <Button x:Name="SelReproductor" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,0" Width="100" Click="SelReproductor_Click">Seleccionar</Button>
+
+    <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Vertical">
+      <Label>Tiempo de Chequeo (mins)*</Label>
+      <TextBox Margin="5" x:Name="TxtChequeo" Width="30" HorizontalAlignment="Left">15</TextBox>
+    </StackPanel>
+
+    <Separator Margin="0,10,0,10" Grid.Row="5" Grid.ColumnSpan="2"></Separator>
+
+    <StackPanel Orientation="Vertical" Grid.Row="6" Grid.Column="0">
+      <Label>IP FTP*</Label>
+      <TextBox Margin="5" x:Name="TxtIPFTP" Text="192.168.0.1" MouseDoubleClick="SelectAddress"   GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton" />
+    </StackPanel>
+
+    <StackPanel Orientation="Vertical" Grid.Row="6" Grid.Column="1">
+      <Label>Puerto*</Label>
+      <TextBox x:Name="TxtPuerto" Margin="5" GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton" >21</TextBox>
+    </StackPanel>
+
+    <StackPanel Orientation="Vertical" Grid.Row="7" Grid.Column="0">
+      <Label>Usuario*</Label>
+      <TextBox x:Name="TxtUsuario" Margin="5" GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton" >voxline123</TextBox>
+    </StackPanel>
+
+    <StackPanel Orientation="Vertical" Grid.Row="8" Grid.Column="0">
+      <Label>Contraseña*</Label>
+      <PasswordBox  x:Name="TxtContrasena" GotKeyboardFocus="SelectPassword" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton"  Margin="5" />
+    </StackPanel>
+
+    <StackPanel Grid.Row="9"  Grid.ColumnSpan="2" VerticalAlignment="Top" HorizontalAlignment="Center" Height="Auto">
+      <Button x:Name="BtnIniciar" Grid.Row="9" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" Padding="40,10" Width="Auto" Height="Auto" FontWeight="Bold" Click="BtnIniciar_Click">Iniciar</Button>
+      
+      <Button x:Name="BtnCerrar" Grid.Row="9" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" Padding="10" Width="Auto" Height="Auto" FontWeight="Bold"  Background="DarkRed" Foreground="White" Click="BtnCerrar_Click">Cerrar</Button>
+    </StackPanel>
+
+   
+  </Grid>
+</Window>
