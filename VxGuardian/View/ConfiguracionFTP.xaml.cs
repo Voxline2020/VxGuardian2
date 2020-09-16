@@ -313,7 +313,6 @@ namespace VxGuardian.View
 				{
 					try
 					{
-						//Gustavo : Cierra el reproductor y copia los archivos de la carpeta temporal a la real 
 						//CreateBS();
 						Etc.KillApp(ini.config.Reproductor); //Cierra el reproductor 
 						System.Threading.Thread.Sleep(3000);						
@@ -329,7 +328,8 @@ namespace VxGuardian.View
 						//Debug.WriteLine(ex.Message);
 						//throw;
 					}
-					//gustavo
+
+					//gustavo copya el json a la carpeta final antes de borrar la temporal
 					try
 					{
 						CopyJsonPlayList(TemporalStorage, ini.config.CarpetaRaiz);//Copia el json PLayList del directorio temporal a la carpeta raiz
@@ -431,7 +431,7 @@ namespace VxGuardian.View
 			CopyAll(diSource, diTarget, _ini, ftpClient, null);
 		}
 
-		//GUSTAVO
+		//GUSTAVO metodo para copiar el json de la carpeta temporal a la carpeta final
 		public static void CopyJsonPlayList(string source, string target )
 		{
 			//Copiar PlayList
@@ -519,6 +519,7 @@ namespace VxGuardian.View
 			//Process.Start(@_dir);
 		}
 
+		//DESCARGA
 		private void DownloadFilesAsync(FtpClient _ftpclient, string _remotePath)
 		{
 			string Path = _remotePath;
@@ -531,8 +532,8 @@ namespace VxGuardian.View
 			//string root_temp_adress = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\VoxLine\\PlayList.json";
 			//Descargae el json a la carpeta raiz
 			//JSON var directorio = _ftpclient.GetListing("PlayList.json");
-			var directorio = _ftpclient.GetListing(Path + "\\p859");
-			var pantalla = directorio[0];
+			//var directorio = _ftpclient.GetListing(Path + "\\p859");
+			//var pantalla = directorio[0];
 			ftpClient.DownloadFile(TemporalLocalFolder+ "\\PLayList.json", "PlayList.json", FtpLocalExists.Overwrite, FtpVerify.Retry);
 
 			//
@@ -613,7 +614,46 @@ namespace VxGuardian.View
 							FileInfo f = new FileInfo(downloadFileName);
 							try
 							 {
+								//GUSTAVO
+								string rutaarchivoftp = screen.LocalPath + "\\" + item.Name; //Ruta del archivo en la carpeta definitiva		
+								var directorio = Directory.Exists(rutaarchivoftp);
 
+								if (Directory.Exists(screen.LocalPath))
+								{
+									if (File.Exists(rutaarchivoftp))
+									{										
+										Etc.CopyFile(rutaarchivoftp , ScreenTemporal + "\\" + item.Name);
+										gLog.SaveLog("COPIADO " + item.Name);
+									}
+									else
+									{
+										if (ftpClient.DownloadFile(downloadFileName, item.FullName, FtpLocalExists.Overwrite, FtpVerify.Retry))
+										{
+											Downloaded = true;
+											gLog.SaveLog("DESCARGADO " + item.Name);
+										}
+										else
+										{
+											gLog.SaveLog("ERROR EN " + item.Name);
+										}
+										
+									}
+
+								}else
+								{
+									if (ftpClient.DownloadFile(downloadFileName, item.FullName, FtpLocalExists.Overwrite, FtpVerify.Retry))
+									{
+										Downloaded = true;
+										gLog.SaveLog("DESCARGADO " + item.Name);
+									}
+									else
+									{
+										gLog.SaveLog("ERROR EN " + item.Name);
+									}
+								}
+								
+								
+								/* ANTES
 								    if (ftpClient.DownloadFile(downloadFileName, item.FullName, FtpLocalExists.Overwrite, FtpVerify.Retry))
 								 {
 									 Downloaded = true;
@@ -622,7 +662,7 @@ namespace VxGuardian.View
 								else
 								{
 									gLog.SaveLog("ERROR EN " + item.Name);
-								}
+								}*/
 
 							}
 							catch (Exception ex)

@@ -243,6 +243,19 @@ namespace VxGuardian.EtcClass
 			{ }
         }
 
+		//Gustavo 
+		public static void CopyFile(string path, string pathDes)
+		{
+			try
+			{
+				File.Copy(path, pathDes); // Daniel
+			}
+			catch
+			{ }
+		}
+
+
+
 
 		//Verificar directorio, si no existe lo crea.
 		public static void CreateDir(string path)
