@@ -297,8 +297,6 @@ namespace VxGuardian.View
 			{
 				try
 				{
-
-
 					DownloadFilesAsync(ftpClient, Path);
 					CloseConnection();
 					gLog.SaveLog("Se sincronizo archivos");
@@ -310,14 +308,16 @@ namespace VxGuardian.View
 				}
 
 				//si hubo descargas
+				//Falta descargar JSON
 				if (Downloaded)
 				{
 					try
 					{
+						//Gustavo : Cierra el reproductor y copia los archivos de la carpeta temporal a la real 
 						//CreateBS();
-						Etc.KillApp(ini.config.Reproductor);
-						System.Threading.Thread.Sleep(3000);
-						CopyTemporalToDirAsync(TemporalStorage, ini.config.CarpetaRaiz);
+						Etc.KillApp(ini.config.Reproductor); //Cierra el reproductor 
+						System.Threading.Thread.Sleep(3000);						
+						CopyTemporalToDirAsync(TemporalStorage, ini.config.CarpetaRaiz); //Copia el directorio temporal a la carpeta raiz
 						//OpenApp(ini.config.Reproductor);
 						//CloseBS();
 						Downloaded = false;
@@ -328,6 +328,16 @@ namespace VxGuardian.View
 						gLog.SaveLog(ex.Message);
 						//Debug.WriteLine(ex.Message);
 						//throw;
+					}
+					//gustavo
+					try
+					{
+						CopyJsonPlayList(TemporalStorage, ini.config.CarpetaRaiz);//Copia el json PLayList del directorio temporal a la carpeta raiz
+					}
+					catch (Exception ex)
+					{
+
+						gLog.SaveLog("ERROR COPY PlayList.json " + ex.Message);
 					}
 					//cambio gonzalo
 					try
@@ -421,6 +431,28 @@ namespace VxGuardian.View
 			CopyAll(diSource, diTarget, _ini, ftpClient, null);
 		}
 
+		//GUSTAVO
+		public static void CopyJsonPlayList(string source, string target )
+		{
+			//Copiar PlayList
+			//var exist_json = File.Exists(target.FullName + "\\PlayList.json");
+
+
+			if (File.Exists(target + "\\PlayList.json"))
+			{
+				//SI el archivo existe
+				//Borra el archivo 
+				File.Delete(target + "\\PlayList.json");
+				//Copia el archivo
+				File.Copy(source + "\\PlayList.json", target + "\\PlayList.json");
+			}
+			else
+			{
+				//si no existe copia el
+				File.Copy(source + "\\PlayList.json", target + "\\PlayList.json");
+			}
+		}
+
 		public static void CopyAll(DirectoryInfo source, DirectoryInfo target, Inicio _ini, FtpClient ftp, ScreensGuardian _screen = null)
 		{
 
@@ -493,7 +525,21 @@ namespace VxGuardian.View
 			string TemporalLocalFolder = TemporalStorage;
 			Downloaded = false;
 
-			Etc.CreateDir(TemporalLocalFolder);
+
+
+			//GUSTAVO 			
+			//string root_temp_adress = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\VoxLine\\PlayList.json";
+			//Descargae el json a la carpeta raiz
+			//JSON var directorio = _ftpclient.GetListing("PlayList.json");
+			var directorio = _ftpclient.GetListing(Path + "\\p859");
+			var pantalla = directorio[0];
+			ftpClient.DownloadFile(TemporalLocalFolder+ "\\PLayList.json", "PlayList.json", FtpLocalExists.Overwrite, FtpVerify.Retry);
+
+			//
+
+
+
+				Etc.CreateDir(TemporalLocalFolder);
 
 			int auxI = 0;
 
@@ -516,7 +562,7 @@ namespace VxGuardian.View
 					else
 					{
 						ScreensGuardian _screen = new ScreensGuardian();
-						_screen.Nombre = item.Name;
+						 _screen.Nombre = item.Name;
 						_screen.Path = item.FullName;
 						_screen.Code = code;
 						_screen.LocalPath = ini.config.CarpetaRaiz + "\\p" + code;
@@ -558,21 +604,21 @@ namespace VxGuardian.View
 						gLog.SaveLog("ERROR CLEAR DOWNLOAD " + ex.Message);
 					}
 					
-
+					//Descarga los dentro de la carpeta correspondiendte a la pantalla en el ftp 
 					foreach (FtpListItem item in _ftpclient.GetListing(screen.Path).OrderByDescending(item => item.Name))
 					{
-						if (item.Type == FtpFileSystemObjectType.File)
-						{
-							string downloadFileName = ScreenTemporal + "\\" + item.Name;
+						 if (item.Type == FtpFileSystemObjectType.File)
+						  {
+							  string downloadFileName = ScreenTemporal + "\\" + item.Name;
 							FileInfo f = new FileInfo(downloadFileName);
 							try
-							{
+							 {
 
-								if (ftpClient.DownloadFile(downloadFileName, item.FullName, FtpLocalExists.Overwrite, FtpVerify.Retry))
-								{
-									Downloaded = true;
-									gLog.SaveLog("DESCARGADO " + item.Name);
-								}
+								    if (ftpClient.DownloadFile(downloadFileName, item.FullName, FtpLocalExists.Overwrite, FtpVerify.Retry))
+								 {
+									 Downloaded = true;
+									 gLog.SaveLog("DESCARGADO " + item.Name);
+								 }
 								else
 								{
 									gLog.SaveLog("ERROR EN " + item.Name);
@@ -585,7 +631,7 @@ namespace VxGuardian.View
 								//throw;
 							}
 						}
-					}
+					  }
 
 
 				}
