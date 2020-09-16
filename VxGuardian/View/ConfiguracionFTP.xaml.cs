@@ -15,6 +15,7 @@ using VxGuardian.Common;
 using VxGuardian.Models;
 using VxGuardian.EtcClass;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace VxGuardian.View
 {
@@ -315,8 +316,14 @@ namespace VxGuardian.View
 					{
 						//CreateBS();
 						Etc.KillApp(ini.config.Reproductor); //Cierra el reproductor 
-						System.Threading.Thread.Sleep(3000);						
-						CopyTemporalToDirAsync(TemporalStorage, ini.config.CarpetaRaiz); //Copia el directorio temporal a la carpeta raiz
+						System.Threading.Thread.Sleep(3000);
+						//CopyTemporalToDirAsync(TemporalStorage, ini.config.CarpetaRaiz); //Copia el directorio temporal a la carpeta raiz
+
+
+						//GUSTAVO
+						CopyTemporalToDirAsync2(TemporalStorage, ini.config.CarpetaRaiz); //Copia el directorio temporal a la carpeta raiz 
+
+
 						//OpenApp(ini.config.Reproductor);
 						//CloseBS();
 						Downloaded = false;
@@ -401,7 +408,79 @@ namespace VxGuardian.View
 			ini.db.Save(ini.config);
 		}
 
+		//Gustavo
+		private void CopyTemporalToDirAsync2(string _temporalFolder, string _destinyFolder)
+		{
+			//Borrar directiorio actual
+			if(Directory.Exists(_destinyFolder))
+			{
+				Etc.DeleteFiles(_destinyFolder);
+			}
+			
+			try
+			{
+				if (Directory.Exists(_temporalFolder))
+				{
+					// read JSON directly from a file
+					if (File.Exists(_temporalFolder + "\\" + "PlayList.json"))
+					{
+						//Crear directorio definitivo
 
+						using (StreamReader file = File.OpenText(_temporalFolder + "\\" + "PlayList.json"))
+						using (JsonTextReader reader = new JsonTextReader(file))
+						{
+
+							JObject o2 = (JObject)JToken.ReadFrom(reader);
+							var computers = o2["computers"];
+							foreach (var computer in computers)
+							{
+								
+								//No se crea un directiorio por computador SOLO PANTALLAS
+								foreach (var screen in computer["screens"])
+								{
+									string screen_folder_name = "p" + screen["code"];
+									Directory.CreateDirectory(_destinyFolder + "\\" + screen_folder_name);
+									var screen_version = screen["version"];
+									string version_temp_path = _temporalFolder + "\\" + screen_folder_name + "\\" +"v"+ screen_version + ".txt";
+									string version_destiny_path = _destinyFolder + "\\" + screen_folder_name + "\\" + "v" + screen_version + ".txt";
+									if (File.Exists(version_temp_path))
+									{
+										File.Copy(version_temp_path, version_destiny_path);
+									}
+									foreach (var content in screen["playlist"])
+									{
+										string content_name = content["name"].ToString();
+										string content_original_id = content["originalID"].ToString();
+										string content_temp_path = _temporalFolder + "\\" + screen_folder_name + "\\" + content_original_id + "-" + content_name + ".mp4";
+										string content_destiny_path = _destinyFolder + "\\" + screen_folder_name + "\\" + content_original_id + "-" + content_name + ".mp4";
+
+										if (File.Exists(content_temp_path))
+										{
+											File.Copy(content_temp_path, content_destiny_path);
+										}
+									}//end foreach playlist
+								}//end foreach screens
+							}//end foreach computers
+						}
+
+
+					}else
+					{
+						gLog.SaveLog("PlayList.Json  no existe en la carpeta temporal");
+					}
+
+				}
+				else
+				{
+					Console.WriteLine("Source path does not exist!");
+				}
+			}
+			catch (Exception ex)
+			{
+				gLog.SaveLog("No se logro copiar archivos -- " + ex.Message);
+				//throw;
+			}
+		}
 
 		private void CopyTemporalToDirAsync(string _temporalFolder, string _destinyFolder)
 		{
@@ -538,8 +617,6 @@ namespace VxGuardian.View
 
 			//
 
-
-
 				Etc.CreateDir(TemporalLocalFolder);
 
 			int auxI = 0;
@@ -624,6 +701,7 @@ namespace VxGuardian.View
 									{										
 										Etc.CopyFile(rutaarchivoftp , ScreenTemporal + "\\" + item.Name);
 										gLog.SaveLog("COPIADO " + item.Name);
+										Downloaded = true;
 									}
 									else
 									{
