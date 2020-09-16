@@ -421,47 +421,75 @@ namespace VxGuardian.View
 			{
 				if (Directory.Exists(_temporalFolder))
 				{
-					// read JSON directly from a file
+					//comprueba que exista el json 
 					if (File.Exists(_temporalFolder + "\\" + "PlayList.json"))
 					{
 						//Crear directorio definitivo
 
-						using (StreamReader file = File.OpenText(_temporalFolder + "\\" + "PlayList.json"))
-						using (JsonTextReader reader = new JsonTextReader(file))
-						{
-
-							JObject o2 = (JObject)JToken.ReadFrom(reader);
-							var computers = o2["computers"];
+						// leer json desde un archivo
+						StreamReader file = File.OpenText(_temporalFolder + "\\" + "PlayList.json");
+						JsonTextReader reader = new JsonTextReader(file);
+						
+							//json object para trabajar
+							JObject jsondata = (JObject)JToken.ReadFrom(reader);
+							
+							var computers = jsondata["computers"];
+							
+							//recorre la lista de computadores en el JSON
 							foreach (var computer in computers)
 							{
-								
-								//No se crea un directiorio por computador SOLO PANTALLAS
+								//No se crea una carpeta por computador SOLO PANTALLAS
+
+								//Recorre la lista de pantallas por computador en el JSON
 								foreach (var screen in computer["screens"])
 								{
+									//nombre de la carpetas
 									string screen_folder_name = "p" + screen["code"];
+									//crea el directorio definitivo
 									Directory.CreateDirectory(_destinyFolder + "\\" + screen_folder_name);
+									//extrae la version de la pantalla
 									var screen_version = screen["version"];
+									//url del archivo de version temporal
 									string version_temp_path = _temporalFolder + "\\" + screen_folder_name + "\\" +"v"+ screen_version + ".txt";
+									//url del archivo de version definitivo
 									string version_destiny_path = _destinyFolder + "\\" + screen_folder_name + "\\" + "v" + screen_version + ".txt";
+									//comprueba si existe el archivo de version temporal
 									if (File.Exists(version_temp_path))
 									{
+										//copia el archivo de version temporal a la carpeta definitiva
 										File.Copy(version_temp_path, version_destiny_path);
-									}
-									foreach (var content in screen["playlist"])
-									{
-										string content_name = content["name"].ToString();
-										string content_original_id = content["originalID"].ToString();
-										string content_temp_path = _temporalFolder + "\\" + screen_folder_name + "\\" + content_original_id + "-" + content_name + ".mp4";
-										string content_destiny_path = _destinyFolder + "\\" + screen_folder_name + "\\" + content_original_id + "-" + content_name + ".mp4";
-
-										if (File.Exists(content_temp_path))
+										
+										//recorre los contenido de la playlist en el json 
+										foreach (var content in screen["playlist"])
 										{
-											File.Copy(content_temp_path, content_destiny_path);
-										}
-									}//end foreach playlist
+											//nombre del contenido
+											string content_name = content["name"].ToString();
+											//id del contenido
+											string content_original_id = content["originalID"].ToString();
+											//posicion del contenido
+											string content_position = content["defOrder"].ToString();
+
+										//url del contenido temporal id-nombre-nombre.mp4
+										string content_temp_path = _temporalFolder + "\\" + screen_folder_name + "\\" + content_original_id + "-" + content_name + ".mp4";
+											//url del contenido definitivo orden-id-nombre.mp4
+											string content_destiny_path = _destinyFolder + "\\" + screen_folder_name + "\\" + content_position + "-" + content_original_id + "-" + content_name + ".mp4";
+											
+											//Comprueba si existe el contenido temporal
+											if (File.Exists(content_temp_path))
+											{
+												//Copia el contenido temporal a la carpeta definitiva
+												File.Copy(content_temp_path, content_destiny_path);
+											}
+										}//end foreach playlist
+
+									}else
+									{
+										gLog.SaveLog("No se encontro el archvio (Version).txt");
+								}
+									
 								}//end foreach screens
 							}//end foreach computers
-						}
+						
 
 
 					}else
