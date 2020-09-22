@@ -301,6 +301,12 @@ namespace VxGuardian.View
 			{
 				try
 				{
+					//GUSTAVO
+					//archivos en el ftp
+					//var archivos_ftp = ftpClient.GetListing();
+
+					
+					
 					DownloadFilesAsync(ftpClient, Path);
 					CloseConnection();
 					gLog.SaveLog("Se sincronizo archivos");
@@ -317,6 +323,7 @@ namespace VxGuardian.View
 				{
 					try
 					{
+
 						//CreateBS();
 						Etc.KillApp(ini.config.Reproductor); //Cierra el reproductor 
 						System.Threading.Thread.Sleep(3000);
@@ -636,7 +643,7 @@ namespace VxGuardian.View
 			string TemporalLocalFolder = TemporalStorage;
 			Downloaded = false;
 
-
+			 
 
 			//GUSTAVO 			
 			//string root_temp_adress = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\VoxLine\\PlayList.json";
@@ -701,6 +708,8 @@ namespace VxGuardian.View
 				
 				if (!Etc.CheckDir(screen.LocalPath) || screen.VersionRemota > Int32.Parse(screen.VersionActual))
 				{
+					//Gustavo
+					screen.VersionActual = screen.VersionRemota.ToString();
 					string ScreenTemporal = TemporalLocalFolder + '\\' + screen.Nombre;
 					Etc.CreateDir(ScreenTemporal);
 					try
@@ -756,14 +765,17 @@ namespace VxGuardian.View
 											new_video_name = "";
 											for (int i = 0; i < separated_video_name.Length; i++)
 											{
+												//omite la primera posicion
 												if(i==0)
 												{
 													orderdef = separated_video_name[i];
 												}
+												//agrega - para volver a unir las partes
 												if (i > 0 && i < separated_video_name.Length - 1)
 												{
 													new_video_name = new_video_name + separated_video_name[i] + "-";
 												}
+												//evita poner - en la ultima posicion del arreglo
 												if (i == separated_video_name.Length - 1)
 												{
 													new_video_name = new_video_name + separated_video_name[i];
