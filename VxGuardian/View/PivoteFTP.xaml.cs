@@ -417,6 +417,7 @@ namespace VxGuardian.View
 													if (Etc.CheckFile(screenFolder + "/" + contentName))
 													{
 														File.Copy(screenFolder + "/" + contentName, screenFolder_TMP + "/" + contentName);
+														gLog.SaveLog("First: Se copio  " + contentName + " en " + screenFolder_TMP);
 													}
 													else
 													{ 

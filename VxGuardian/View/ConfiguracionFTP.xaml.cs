@@ -260,21 +260,24 @@ namespace VxGuardian.View
 
 		private void InitTime()
 		{
+
 			double interval = Double.Parse(ini.config.TiempoChequeo);
 			time = new Timer(Etc.minsToMS(interval));
 			time.Elapsed += Timer_Elapsed;
 			time.AutoReset = true;
 			time.Start();
+
 		}
 
 		public void StopTime()
 		{
 			time.Stop();
 		}
-
+		
+		//Gustavo modificacion antes _: != 0  ahora == 0 
 		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			if(ini.config.Syncing != 0)
+			if(ini.config.Syncing == 0)
 			{
 				SyncAsync(ini.config.CodePc);
 			}
@@ -412,7 +415,7 @@ namespace VxGuardian.View
 		private void CopyTemporalToDirAsync2(string _temporalFolder, string _destinyFolder)
 		{
 			//Borrar directiorio actual
-			if(Directory.Exists(_destinyFolder))
+			 if(Directory.Exists(_destinyFolder))
 			{
 				Etc.DeleteFiles(_destinyFolder);
 			}
@@ -641,11 +644,11 @@ namespace VxGuardian.View
 			//JSON var directorio = _ftpclient.GetListing("PlayList.json");
 			//var directorio = _ftpclient.GetListing(Path + "\\p859");
 			//var pantalla = directorio[0];
+
+			//Descargar el json 
 			ftpClient.DownloadFile(TemporalLocalFolder+ "\\PLayList.json", "PlayList.json", FtpLocalExists.Overwrite, FtpVerify.Retry);
 
-			//
-
-				Etc.CreateDir(TemporalLocalFolder);
+			//Etc.CreateDir(TemporalLocalFolder);
 
 			int auxI = 0;
 
@@ -722,9 +725,70 @@ namespace VxGuardian.View
 								//GUSTAVO
 								string rutaarchivoftp = screen.LocalPath + "\\" + item.Name; //Ruta del archivo en la carpeta definitiva		
 								var directorio = Directory.Exists(rutaarchivoftp);
+								string new_video_name = "";
+								string extencion = "";
+								var encontro = false;
+								var orderdef = "";
+
 
 								if (Directory.Exists(screen.LocalPath))
 								{
+									//GUSTAVO
+									//Extraer lae extencion
+
+									var item_separated = (item.Name).Split('.');
+									if (item_separated.Length > 0)
+									{
+										extencion = item_separated[item_separated.Length - 1];
+
+									}
+
+									//Si lae extencion es txt , corresponde a la version y lo copia sin necesidad de modificar el nombre.
+									if(extencion != "txt")
+									{
+										//MODIFICAR LA RUTA PARA SABER QUE ARCHIVO COPIAR									
+										var archivos = Directory.GetFiles(screen.LocalPath);
+										foreach (var archivo in archivos)
+										{
+											new_video_name = archivo.Remove(0, (screen.LocalPath + "\\").Length);
+											var separated_video_name = new_video_name.Split('-');
+											
+											new_video_name = "";
+											for (int i = 0; i < separated_video_name.Length; i++)
+											{
+												if(i==0)
+												{
+													orderdef = separated_video_name[i];
+												}
+												if (i > 0 && i < separated_video_name.Length - 1)
+												{
+													new_video_name = new_video_name + separated_video_name[i] + "-";
+												}
+												if (i == separated_video_name.Length - 1)
+												{
+													new_video_name = new_video_name + separated_video_name[i];
+												}
+											}
+
+											//Comparacion de nombres 
+											string ruta_video_name = rutaarchivoftp.Remove(0, (screen.LocalPath + "\\").Length);
+											if(ruta_video_name == new_video_name)
+											{
+												encontro = true;
+												rutaarchivoftp = screen.LocalPath + "\\" + orderdef + "-" + ruta_video_name;
+												break;
+											}
+											
+
+
+
+										}
+
+										//----------------------------
+									}
+
+
+
 									if (File.Exists(rutaarchivoftp))
 									{										
 										Etc.CopyFile(rutaarchivoftp , ScreenTemporal + "\\" + item.Name);
