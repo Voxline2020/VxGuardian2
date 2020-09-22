@@ -274,7 +274,7 @@ namespace VxGuardian.View
 			time.Stop();
 		}
 		
-		//Gustavo modificacion antes _: != 0  ahora == 0 
+		//Gustavo modificacion antes : != 0  ahora == 0 
 		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
 			if(ini.config.Syncing == 0)
