@@ -274,7 +274,7 @@ namespace VxGuardian.View
 			time.Stop();
 		}
 		
-		//Gustavo modificacion antes : != 0  ahora == 0 
+		//Gustavo modificacion antes : != 0 Desactivado , ahora == 0  activado
 		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
 			if(ini.config.Syncing == 0)
@@ -708,8 +708,9 @@ namespace VxGuardian.View
 				
 				if (!Etc.CheckDir(screen.LocalPath) || screen.VersionRemota > Int32.Parse(screen.VersionActual))
 				{
-					//Gustavo
+					//Gustavo guarda en memoria la version actual de la pantalla
 					screen.VersionActual = screen.VersionRemota.ToString();
+
 					string ScreenTemporal = TemporalLocalFolder + '\\' + screen.Nombre;
 					Etc.CreateDir(ScreenTemporal);
 					try
