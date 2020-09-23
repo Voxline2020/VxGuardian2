@@ -123,7 +123,11 @@ namespace VxGuardian.View
 				TemporalStorage = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\VoxLine\\" + ini.config.CodePc;
 				Etc.CreateDir(TemporalStorage);
 				Sync();
-				InitTime();
+				if(!initiated)
+				{
+					InitTime();
+				}
+				
 				initiated = true;
 			}
 			else
