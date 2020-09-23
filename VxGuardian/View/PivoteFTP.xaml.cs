@@ -151,9 +151,12 @@ namespace VxGuardian.View
 			ini.config.Syncing = 0;
 			ini.db.Save(ini.config);
 
-			//Gustavo
-			InitTime();
-			initiated = true;
+			if(!initiated)
+			{
+				InitTime();
+				initiated = true;
+			}
+
 		}
 
 		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -294,8 +297,13 @@ namespace VxGuardian.View
 
 		private void Sync()
 		{
-			StopTime();
-			initiated = false;
+
+			if(initiated)
+			{
+				StopTime();
+				initiated = false;
+			}
+			
 
 			var dictionary = new Dictionary<int, int>();
 			//descargar json
