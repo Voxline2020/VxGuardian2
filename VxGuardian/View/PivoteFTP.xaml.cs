@@ -150,6 +150,10 @@ namespace VxGuardian.View
 		{
 			ini.config.Syncing = 0;
 			ini.db.Save(ini.config);
+
+			//Gustavo
+			InitTime();
+			initiated = true;
 		}
 
 		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -173,12 +177,17 @@ namespace VxGuardian.View
 			time.Elapsed += Timer_Elapsed;
 			time.AutoReset = true;
 			time.Start();
+			Log glog = new Log();
+			glog.SaveLog("TIMER :: START ");
 		}
 
 
 		public void StopTime()
 		{
 			time.Stop();
+			Log glog = new Log();
+			glog.SaveLog("TIMER :: Stop ");
+
 		}
 
 
@@ -285,6 +294,9 @@ namespace VxGuardian.View
 
 		private void Sync()
 		{
+			StopTime();
+			initiated = false;
+
 			var dictionary = new Dictionary<int, int>();
 			//descargar json
 			using (var webClient = new WebClient())
@@ -483,7 +495,7 @@ namespace VxGuardian.View
 								else if(screen.Version > Int32.Parse(_screen.VersionActual))
 								{
 									//gustavo
-									_screen.VersionActual = screen.Version.ToString();
+									//_screen.VersionActual = screen.Version.ToString();
 									////------------------------------------------------------------------------------------
 									////Daniel
 									////Crear archivo Json
