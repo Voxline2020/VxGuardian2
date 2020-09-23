@@ -438,11 +438,11 @@ namespace VxGuardian.View
 											}
 										}// End foreach
 
-									//GUSTAVO 
-									//Etc.CreateVersion(screenFolder_TMP, screen.Version.ToString()); //Daniel									
-								    //Etc.DeleteLock(screenFolder_TMP); // Daniel
-									//Etc.MoveDir(screenFolder_TMP, screenFolder);
-									Directory.Delete(screenFolder, true); // Daniel
+										//GUSTAVO 
+										//Etc.CreateVersion(screenFolder_TMP, screen.Version.ToString()); //Daniel									
+										//Etc.DeleteLock(screenFolder_TMP); // Daniel
+										//Etc.MoveDir(screenFolder_TMP, screenFolder);
+										Directory.Delete(screenFolder, true); // Daniel
 
 									}
 									else
@@ -482,6 +482,8 @@ namespace VxGuardian.View
 								//si la version
 								else if(screen.Version > Int32.Parse(_screen.VersionActual))
 								{
+									//gustavo
+									_screen.VersionActual = screen.Version.ToString();
 									////------------------------------------------------------------------------------------
 									////Daniel
 									////Crear archivo Json
