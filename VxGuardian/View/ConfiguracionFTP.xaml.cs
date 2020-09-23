@@ -359,7 +359,12 @@ namespace VxGuardian.View
 					//cambio gonzalo
 					try
 					{
-						Etc.DeleteFiles(TemporalStorage);
+						//gustavo
+						if(File.Exists(TemporalStorage))
+						{
+							Etc.DeleteFiles(TemporalStorage);
+						}
+						
 					}
 					catch (Exception ex)
 					{
@@ -622,9 +627,6 @@ namespace VxGuardian.View
 				_ini.config.Screens[idx] = screenAUX;
 				_ini.db.Save(_ini.config);
 			}
-
-
-
 		}
 
 		private void OpenApp(string _dir)
@@ -642,9 +644,7 @@ namespace VxGuardian.View
 			string Path = _remotePath;
 			string TemporalLocalFolder = TemporalStorage;
 			Downloaded = false;
-
-			 
-
+			
 			//GUSTAVO 			
 			//string root_temp_adress = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\VoxLine\\PlayList.json";
 			//Descargae el json a la carpeta raiz
